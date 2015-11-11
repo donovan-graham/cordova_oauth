@@ -1,0 +1,5 @@
+plugins/
+platforms/android/
+platforms/ios/
+.DS_Store
+secret.txt

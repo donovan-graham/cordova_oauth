@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
+        <script type="text/javascript" src="cordova.js"></script>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
+        <script type="text/javascript" src="cordova.oauth2.js"></script>
+        <script type="text/javascript" src="xhr.js"></script>
+        <script type="text/javascript" src="main.js"></script>
+
+        <style>
+            body{background-color:white;font-family: Arial;margin: 0}
+            .content {padding: 0 20px}
+            .button {text-align: center;padding: 10px;border-radius: 10px;border: 1px solid #777;background-color: #ddd}
+            h1 {text-align: center}
+            p.success {background-color: #efe; padding:5px}
+            p.error {background-color: #fee; padding:5px}
+        </style>
+        <title>Oauth2 Cordova</title>
+    </head>
+    <body>
+        <div class="content">
+
+            <h1>Dropbox</h1>
+            <p><div class="button" onclick="oauth2_login()">Login</div></p>
+            <div id="logs"></div>
+
+            <p><div class="button" onclick="get_files()">Get files</div></p>
+            <ul id="files"></ul>
+
+        </div>
+    </body>
+</html>
