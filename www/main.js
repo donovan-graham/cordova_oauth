@@ -1,4 +1,3 @@
-
 var db_isAuthed = false;
 var db_token = null;
 
@@ -35,32 +34,50 @@ function oauth2_login() {
 }
 
 
-function get_files() {
+function get_files(path) {
     if (!db_isAuthed) { return; }
 
+    path = path || "";
+
     $.ajax({
-        url: "https://api.dropboxapi.com/1/metadata/auto/",
-        type: 'GET',
+        url: "https://api.dropboxapi.com/2/files/list_folder",
+        type: "POST",
+        contentType: "application/json",
         dataType: "json",
-        beforeSend: function(xhr, settings) { xhr.setRequestHeader('Authorization','Bearer ' + db_token); },
+        data: JSON.stringify({
+            path: path,
+            include_media_info: true,
+        }),
+        beforeSend: function(xhr, settings) {
+            xhr.setRequestHeader('Authorization','Bearer ' + db_token);
+        },
         success: function(data) {
             var files = $('#files');
             files.find('li').remove();
 
-            for (var i=0; i < data.contents.length; i++) {
-                var resource = data.contents[i];
-                var node = document.createElement('li');
+            // console.log(data);
 
-                if (!resource.is_dir) {
-                    node.textContent = resource.path + " (" + resource.size + ")";
+            for (var i=0; i < data.entries.length; i++) {
+                var entry = data.entries[i];
+                var node = document.createElement('li');
+                var imgSrc = "";
+
+                // .tag: "file"
+                // .tag: "folder"
+                // path_lower: "/pd_sample.zip"
+
+                if (entry[".tag"] === "file") {
+                    node.textContent = entry.path_lower + " (" + entry.size + " kb)";
+                    imgSrc = "./dropbox-api-icons/16x16/page_white.gif";
                 } else {
-                    node.textContent = resource.path;
+                    node.textContent = entry.path_lower;
+                    imgSrc = "./dropbox-api-icons/16x16/folder.gif";
                 }
 
-                node.setAttribute("data-id", encodeURI(resource.path));
+                node.setAttribute("data-id", encodeURI(entry.path_lower));
 
                 var img = document.createElement('img');
-                img.setAttribute('src', "./dropbox-api-icons/16x16/" + resource.icon + ".gif");
+                img.setAttribute('src', imgSrc);
 
                 node.appendChild(img);
 
